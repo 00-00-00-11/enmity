@@ -1,0 +1,6 @@
+{
+    "name": "multitask",
+    "description": "simple, and effortless account switching for discord mobile. for this to work, you'll need the tokens of the accounts you need to access with multitask. you can view your current account's token by running /multitasktoken",
+    "author": "Connor!#0800",
+    "version": "0.0.1-canary"
+}
