@@ -1,4 +1,4 @@
-name: build enmity plugins and publish
+name: build
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
-      - name: checkout repo
+      - name: checkout
         uses: actions/checkout@v3
         with:
           submodules: true
@@ -26,10 +26,10 @@ jobs:
         with:
           node-version: "16"
           cache: "npm"
-          cache-dependency-path: "*/package-lock.json"
-      - name: building plugins
+          cache-dependency-path: "src/*/package-lock.json"
+      - name: build plugins
         run: |
-              for plugin in *; do
+          for plugin in src/*; do
             if [ "$(basename $plugin)" = "PluginTemplate" ]; then
               continue
             fi
@@ -40,19 +40,19 @@ jobs:
               npm run build
             )
           done
-      - name: upload artifacts
+      - name: upolad artifacts
         uses: actions/upload-artifact@v3
         with:
           name: plugins
           path: |
-            */dist/*.js
-            */dist/*.json
+            src/*/dist/*.js
+            src/*/dist/*.json
   publish:
     runs-on: ubuntu-latest
     needs: build
     if: "!contains(github.event.head_commit.message, 'skip-publish')"
     steps:
-      - name: checkout repo
+      - name: checkout
         uses: actions/checkout@v3
         with:
           submodules: true
@@ -61,7 +61,7 @@ jobs:
         with:
           name: plugins
           path: plugins-artifact/
-      - name: flatten plugins
+      - name: flatten plugins repository
         run: |
           mkdir -p plugins 
           find plugins-artifact -type f -name '*.js' -exec cp '{}' plugins \;
@@ -71,7 +71,7 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: "^1.17"
-      - name: set up enmity store
+      - name: (cool shit) enmity-store setup
         run: |
           mkdir -p $HOME/.enmity-store
           git clone https://github.com/ConnorDoesDev/enmity-store $HOME/.enmity-store
