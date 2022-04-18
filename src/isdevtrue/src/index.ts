@@ -4,7 +4,7 @@ import { registerPlugin } from "enmity-api/plugins";
 const User = getModuleByProps("isDeveloper");
 
 registerPlugin({
-  name: "EnableStaging",
+  name: "experiments",
 
   onStart() {
     Object.defineProperty(User.default, "isDeveloper", {
